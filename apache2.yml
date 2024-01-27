@@ -1,0 +1,60 @@
+---
+- hosts: db
+  become: yes
+  gather_facts: 0
+  tasks:
+
+    - name: update the system
+      yum:
+        name: '*'
+        state: latest
+      tags:          #tag a task and then you can target the task by the tag name to run that specifc tag
+        - update
+
+    - name: Insatll httpd
+      package:
+        name: httpd
+        state: present
+      tags:
+        - install
+
+    - name: start httpd daemon
+      systemd:
+        name: httpd
+        state: started
+        enabled: yes
+      tags:
+        - daemon
+
+    - name: Copy index file to target
+      copy:
+        src: index.html
+        dest: /var/www/html/index.html
+      tags:               # ansible-playbook apache2.yml --tags=file_copy, command to run this specifc task by targeting task
+        - file_copy
+      notify: Resart httpd       # notify is use to call handler and will execute if there is a change/or if this task run
+
+
+  handlers:
+    - name: Resart httpd
+      systemd:
+        name: httpd
+        state: restarted
+
+
+
+
+
+
+
+
+
+
+
+#yum update -y
+#yum install httpd -y
+#systemctl start httpd
+#systemctl enable httpd
+#cd /var/www/html
+#3touch index.html
+#vi

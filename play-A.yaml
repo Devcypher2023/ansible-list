@@ -1,0 +1,26 @@
+---
+- hosts: all
+  become: true
+  gather_facts: yes
+  ignore_errors: true      #ignores error and continue
+  vars:                    #varibale mod
+    user_name: serge2029   #variable name and setting it to a value
+    group_name: devops
+  vars_files:
+    - variables2.yml       #store some variables in this file and load from there
+  tasks:
+    - name: Check the time
+      command: datejjjjjj
+#      when: ansible_distribution == "serge" or ansible_processor_nproc == 2   #When mod use for condition wiil run if condition are met or else it will skip
+    - name: create user charls
+      user:
+        name: "{{user_name}}"  #calling variable
+        comment: admin
+    - name: create group
+      group:
+        name: "{{group_name}}"
+        state: present
+    - name: install package
+      package:
+        name: "{{pkg_name}}"  #calling variable from var fille, 
+        state: present

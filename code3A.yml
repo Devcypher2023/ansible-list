@@ -1,0 +1,17 @@
+---
+- hosts: db
+  become: yes
+  ignore_errors: false
+  tasks:
+    - name: Install packages
+      yum:
+        name: "{{ item }}"    # item is used as a place holder, for with items (loop), this task will run as loop and execute each item
+        state: present
+#      with_items:
+      loop:
+        - curl
+        - finger
+        - wget
+        - httpd
+        - ntp
+  

@@ -1,0 +1,18 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Check the time
+      command: date
+    - name: create user charls
+      user:
+        name: chuck2024
+        comment: admin
+    - name: create group
+      group:
+        name: security
+        state: present
+    - name: install package
+      package:
+        name: vim
+        state: present

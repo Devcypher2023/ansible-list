@@ -1,0 +1,31 @@
+---
+- hosts: db
+  become: yes
+  ignore_errors: yes
+  gather_facts: 1
+  vars:
+    color: red
+  tasks:
+    - name: Check number of cpu
+      command: uptime
+      register: nproc_output        #use register mod to store output of nproc/uptime
+
+    - name: Display the output
+      debug:                         #mod that display message or variable
+#         msg: "hello from my playbook"
+         var: nproc_output.stdout
+
+    - name: create file
+      file:
+        path: /home/ec2-user/week3-2
+        state: touch
+        mode: '0644'
+      register: file_output
+
+    - name: display_output
+      debug:
+        var: file_output.diif.after.path
+
+    - name: display_output
+      debug:
+        var: color
